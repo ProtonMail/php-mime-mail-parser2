@@ -2,6 +2,7 @@
 
 namespace PhpMimeMailParser;
 
+use MimeMailParser\Exception\RuntimeException;
 use PhpMimeMailParser\Attachment;
 use PhpMimeMailParser\Exception;
 use PhpMimeMailParser\Contracts\CharsetManager;
@@ -202,6 +203,21 @@ class Parser
                 'setPath() or setText() or setStream() must be called before retrieving email headers.'
             );
         }
+    }
+
+    /**
+     * Retrieve the raw Email Headers
+     * @return string
+     */
+    public function getHeadersRaw(): string|array
+    {
+        if (isset($this->parts[1])) {
+            return $this->getPart('headers', $this->parts[1]);
+        }
+
+        throw new \RuntimeException(
+            'Parser::setPath() or Parser::setText() must be called before retrieving email headers.',
+        );
     }
 
     /**
